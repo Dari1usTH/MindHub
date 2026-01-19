@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>MindHub</title>
   <link rel="stylesheet" href="../dashboard/dash.css">
+  <link rel="stylesheet" href="../dashboard/games_box.css">
 </head>
 <body>
   <nav>
@@ -16,12 +17,26 @@
   </nav>
 
   <main>
+
     <section class="banner">
       <h1>MindHub</h1>
       <p class="subtitle">Test your limits!</p>
       <p class="description">This is not an expert website for testing iq.</p>
     </section>
-    <section class="games"></section>
+
+    <section class="games">
+      <div class="games-container">
+        <a href="games/game_name.html" class="game-box">
+          <div class="game-image" style="background-image: url('../images/game1.jpg')"></div>
+          <div class="game-tags">
+            <span class="tag">Medium</span>
+            <span class="tag">Memory</span>
+          </div>
+          <div class="game-score" data-game="memory"></div>
+        </a>
+      </div>
+    </section>
+
   </main>
 
   <script src="../dashboard/dash.js"></script>
