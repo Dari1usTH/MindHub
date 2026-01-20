@@ -132,4 +132,3 @@ document.getElementById("answer3").addEventListener("keydown", e => {
 })
 
 resetGame()
-
