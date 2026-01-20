@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>ShapeFit</title>
   <link rel="stylesheet" href="../../dashboard/dash.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <nav>
@@ -13,4 +14,32 @@
       <li>Score: <span class="game-score" data-game="shape3">0</span></li>
     </ul>
   </nav>
+
+  <div class="banner">
+    <div class="game">
+      <h1 id="level">Level 1</h1>
+
+      <div class="target-wrap">
+        <div class="label">Outline</div>
+        <div id="target"></div>
+      </div>
+
+      <div class="options-wrap">
+        <div class="label">Options</div>
+        <div id="options"></div>
+      </div>
+
+      <div id="info"></div>
+
+      <div class="score-display">
+        <span>Current Score: </span><span id="current-score">0</span>
+        <button id="start">Start Game</button>
+        <button id="reset">Reset Game</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="score.js"></script>
 </body>
+</html>
