@@ -1,6 +1,7 @@
 .games {
-  padding: 60px 20px;
+  min-height: 100vh;
   background: #0e1022;
+  padding: 120px 20px 60px;
 }
 
 .games-container {
@@ -18,7 +19,6 @@
   text-decoration: none;
   color: white;
   transition: transform 0.3s;
-  display: block;
   border: 1px solid #2d3250;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
