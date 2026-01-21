@@ -46,7 +46,10 @@ function setLevel() {
 
 function rulesForLevel(l) {
   if (l === 1) return { count: 3, needColor: false, needRot: false, memory: false, rotSameShapeOnly: false }
-  return { count: 3, needColor: true, needRot: false, memory: false, rotSameShapeOnly: false }
+  if (l === 2) return { count: 3, needColor: true, needRot: false, memory: false, rotSameShapeOnly: false }
+  if (l === 3) return { count: 3, needColor: false, needRot: true, memory: false, rotSameShapeOnly: true }
+  if (l === 4) return { count: 4, needColor: true, needRot: true, memory: false, rotSameShapeOnly: false }
+  return { count: 5, needColor: true, needRot: true, memory: true, rotSameShapeOnly: false }
 }
 
 function svgShape(o, outline) {
@@ -84,20 +87,43 @@ function svgShape(o, outline) {
 
 function makeTarget(r) {
   let o = { shape: pick(shapes), color: null, rot: 0 }
+
+  if (r.needRot) {
+    if (r.rotSameShapeOnly) o.shape = pick(["square", "triangle"])
+    o.rot = pick(rots)
+  }
+
   if (r.needColor) o.color = pick(colors)
+
   return o
 }
 
 function makeWrong(r, t) {
+  let o = { shape: t.shape, color: t.color, rot: t.rot }
+
+  if (r.rotSameShapeOnly) {
+    o.shape = t.shape
+    o.color = null
+    let rr = pick(rots)
+    while (rr === t.rot) rr = pick(rots)
+    o.rot = rr
+    return o
+  }
+
   let tries = 0
   while (tries < 50) {
     let x = { shape: pick(shapes), color: null, rot: 0 }
     if (r.needColor) x.color = pick(colors)
+    if (r.needRot) x.rot = pick(rots)
     if (!r.needColor) x.color = null
+    if (!r.needRot) x.rot = 0
     if (!same(x, t)) return x
     tries++
   }
-  return { shape: pick(shapes), color: null, rot: 0 }
+
+  o.shape = pick(shapes)
+  if (o.shape === t.shape) o.shape = shapes[(shapes.indexOf(o.shape) + 1) % shapes.length]
+  return o
 }
 
 function clearTarget() {
@@ -112,6 +138,7 @@ function lockOptions(v) {
 function drawTarget(t, r) {
   let el = document.getElementById("target")
   el.innerHTML = svgShape(t, true)
+  if (r.memory) el.style.visibility = "visible"
 }
 
 function drawOptions(list) {
@@ -132,25 +159,62 @@ function drawOptions(list) {
 function updateBestUI() {
   let s = localStorage.getItem("score_shape3")
   if (s) {
-    let el = document.querySelector('.game-score[data-game="shape33"]')
+    let el = document.querySelector('.game-score[data-game="shape3"]')
     if (el) el.textContent = s
   }
 }
 
 function pickExercises() {
   let ids = []
-  for (let i = 1; i <= totalExercises; i++) ids.push(i)
+  for (let i = 0; i < totalExercises; i++) ids.push(i)
   shuffle(ids)
   exPick = ids.slice(0, playExercises)
   exDone = 0
 }
 
+function buildRound() {
+  let r = rulesForLevel(lvl)
+  correct = makeTarget(r)
+
+  let opts = [correct]
+  while (opts.length < r.count) {
+    let w = makeWrong(r, correct)
+    let ok = true
+    for (let z of opts) if (same(z, w)) ok = false
+    if (ok) opts.push(w)
+  }
+
+  shuffle(opts)
+
+  setLevel()
+  setInfo("")
+  drawTarget(correct, r)
+
+  waiting = false
+
+  if (r.memory) {
+    waiting = true
+    document.getElementById("options").innerHTML = ""
+    setTimeout(() => {
+        document.getElementById("target").style.visibility = "hidden"
+        setTimeout(() => {
+        document.getElementById("target").style.visibility = "visible"
+        document.getElementById("target").innerHTML = ""
+        waiting = false
+        drawOptions(opts)
+        lockOptions(false)
+        }, 150)
+    }, 2000)
+    } else {
+    drawOptions(opts)
+    }
+}
 
 function nextStep() {
   exDone++
-  if (exDone > playExercises) {
+  if (exDone >= playExercises) {
     lvl++
-    if (lvl > 2) endGame()
+    if (lvl > 5) endGame()
     else {
       pickExercises()
       buildRound()
@@ -160,11 +224,38 @@ function nextStep() {
   }
 }
 
+function choose(o) {
+  if (!run) return
+  if (waiting) return
+
+  lockOptions(true)
+
+  if (same(o, correct)) {
+    good++
+    if (good <= 10) pts += 7
+    else pts += 6
+    if (pts > 100) pts = 100
+    setInfo("Correct!")
+  } else {
+    pts -= 5
+    if (pts < 0) pts = 0
+    setInfo("Wrong!")
+  }
+
+
+
+  setScore()
+
+  setTimeout(() => {
+    nextStep()
+  }, 650)
+}
 
 function startGame() {
   run = true
   lvl = 1
   pts = 0
+  good = 0
   waiting = false
   correct = null
 
@@ -184,8 +275,8 @@ function endGame() {
   document.getElementById("options").innerHTML = ""
   setInfo("Game Over! Final Score: " + pts)
 
-  let s = localStorage.getItem("score_shape33")
-  if (!s || pts > parseInt(s)) localStorage.setItem("score_shape33", pts)
+  let s = localStorage.getItem("score_shape3")
+  if (!s || pts > parseInt(s)) localStorage.setItem("score_shape3", pts)
 
   updateBestUI()
   document.getElementById("start").classList.remove("hidden")
