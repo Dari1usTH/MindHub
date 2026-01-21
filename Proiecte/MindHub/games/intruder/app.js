@@ -152,7 +152,84 @@ function updateScore() {
 }
 
 
+function handleClick(index, el) {
+  if (!gameActive) return
 
+  disableAllBoxes()
+
+  let correct = (index === currentIntruderIndex)
+
+  if (correct) {
+    correctCount++
+    el.classList.add("good")
+
+
+  } else {
+    el.classList.add("bad")
+  }
+
+  updateScore()
+  roundIndex++
+
+  if (roundIndex >= TOTAL_ROUNDS) {
+    endGame()
+  } else {
+    setTimeout(renderRound, 900)
+  }
+}
+
+
+function endGame() {
+  gameActive = false
+
+  document.getElementById("grid").innerHTML = ""
+  document.getElementById("question").textContent = "Game Over!"
+  document.getElementById("info").textContent = ""
+
+
+
+  let oldVal = Number(localStorage.getItem("score_intr4")) || 0
+  if (score > oldVal) {
+    localStorage.setItem("score_intr4", String(score))
+    let hsEl = document.querySelector(".game-score")
+    if (hsEl) hsEl.textContent = score
+  }
+
+  document.getElementById("start").textContent = "Start Again"
+}
+
+
+
+function startGame() {
+  gameActive = true
+  score = 0
+  roundIndex = 0
+  correctCount = 0
+
+  updateScore()
+
+  document.getElementById("start").textContent = "Playing..."
+  renderRound()
+}
+
+
+function resetGame() {
+  gameActive = false
+  score = 0
+  roundIndex = 0
+  correctCount = 0
+
+  document.getElementById("title").textContent = "Level 1"
+  document.getElementById("subTitle").textContent = "Round 1 / 3"
+  document.getElementById("question").textContent = "Click the intruder!"
+
+
+  document.getElementById("grid").innerHTML = ""
+  document.getElementById("info").textContent = ""
+
+  updateScore()
+  document.getElementById("start").textContent = "Start Game"
+}
 
 
 document.getElementById("start").onclick = startGame
