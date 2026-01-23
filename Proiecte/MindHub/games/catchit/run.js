@@ -110,6 +110,8 @@ function endLevel(){
   setTimeout(nextRound, 550)
 }
 
+
+
 function nextRound(){
   if(!on) return
 
@@ -127,6 +129,9 @@ function nextRound(){
   $("t").textContent = left.toFixed(1)+"s"
   tick()
 
+
+
+
   r++
   if(r>5){
     clearInterval(tm)
@@ -134,4 +139,81 @@ function nextRound(){
   }
 }
 
+function choose(v){
+  if(!on) return
+  if(lock) return
 
+  lock = true
+  clearInterval(tm)
+  lockOpts(true)
+
+  if(v===ans) ok++
+
+  $("cue").textContent = " "
+  uiScore()
+
+  setTimeout(()=>{
+    if(!on) return
+    if(r>=5){
+      endLevel()
+    }else{
+      nextRound()
+    }
+
+
+  },450)
+}
+
+function endGame(){
+  on = false
+  clearInterval(tm)
+
+  $("t").textContent = " "
+  $("r").textContent = " "
+
+
+  $("q").textContent = ""
+  $("info").textContent = " "
+
+  let final = Math.round( (ok/15)*100 )
+  if(final>100) final=100
+
+  $("sc").textContent = final
+  $("cue").textContent = final
+
+  if(final > score_catchit7){
+    score_catchit7 = final
+    localStorage.setItem("score_catchit7", final)
+    document.querySelector(".game-score").textContent = final
+  }
+
+  $("start").style.display = "inline-block"
+  lockOpts(true)
+}
+
+function resetGame(){
+  on = false
+  clearInterval(tm)
+
+  lvl = 1; r = 0; ok = 0
+  ans = ""; left = 0
+  lock = false
+
+  $("lvl").textContent = "Level 1"
+  $("r").textContent = " "
+  $("t").textContent = " "
+  $("q").textContent = "Click the matching box"
+  $("info").textContent = " "
+  $("opts").innerHTML = ""
+
+  $("cue").textContent = " "
+  $("sc").textContent = "0"
+  $("start").style.display = "inline-block"
+  lockOpts(true)
+}
+
+$("start").onclick = startGame
+$("reset").onclick = resetGame
+
+uiBest()
+resetGame()
