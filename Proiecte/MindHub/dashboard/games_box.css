@@ -63,7 +63,7 @@
 }
 
 .game-score::before {
-  content: "Score: ";
+  content: "BestScore: ";
   color: #7a7a9a;
 }
 

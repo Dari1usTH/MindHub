@@ -202,3 +202,4 @@ $("start").onclick = goNew
 $("reset").onclick = reset
 
 reset()
+

@@ -10,21 +10,21 @@
   <nav>
     <div class="logo">MindHub</div>
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Games</a></li>
-      <li><a href="#">Stats</a></li>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#games">Games</a></li>
+      <li>TotalScore: <span class="total-score">0</span></li>
     </ul>
   </nav>
 
   <main>
 
-    <section class="banner">
+    <section class="banner" id="home">
       <h1>MindHub</h1>
       <p class="subtitle">Test your limits!</p>
       <p class="description">This is not an expert website for testing iq.</p>
     </section>
 
-    <section class="games">
+    <section class="games" id="games">
 
       <div class="games-container">
 
@@ -205,5 +205,6 @@
   </main>
 
   <script src="../dashboard/dash.js"></script>
+  <script src="../dashboard/score_calculator.js"></script>
 </body>
 </html>

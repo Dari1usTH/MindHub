@@ -8,22 +8,31 @@
 </head>
 <body>
   <nav>
-    <div class="logo">Numbers</div>
+    <div class="nav-left">
+      <div class="logo">Numbers</div>
+         <div class="rules">Rules: memorize the shown numbers, then type the number from the asked position.</div>
+    </div>
     <ul>
       <li><a href="../../index.html">Dashboard</a></li>
-      <li>Score: <span class="game-score" data-game="numbers1">0</span></li>
+      <li>BestScore: <span class="game-score" data-game="numbers1">0</span></li>
     </ul>
   </nav>
+
   <div class="banner">
     <div class="game">
       <h1 id="level">Level 1</h1>
       <div id="numbers"></div>
       <div id="question"></div>
+
+       <div id="cw" class="cw"></div>
+
       <div class="input-area">
         <input type="number" id="answer">
         <button id="submit">OK</button>
       </div>
+
       <div id="info"></div>
+
       <div class="score-display">
         <span>Current Score: </span><span id="current-score">0</span>
         <button id="start">Start Game</button>
@@ -31,6 +40,13 @@
       </div>
     </div>
   </div>
+
+    <div id="end" class="end">
+      <div class="end-box">
+        <div id="end-t" class="end-t"></div>
+           <button id="ok">OK</button>
+      </div>
+    </div>
 
   <script src="run.js"></script>
   <script src="score.js"></script>
