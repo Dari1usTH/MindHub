@@ -8,7 +8,10 @@
 </head>
 <body>
   <nav>
-    <div class="logo">Sequence</div>
+    <div class="nav-left">
+      <div class="logo">Sequence</div>
+      <div class="rules">Rules: find the next number(s) in the sequence and type them in order.</div>
+    </div>
     <ul>
       <li><a href="../../index.html">Dashboard</a></li>
       <li>BestScore: <span class="game-score" data-game="sequence2">0</span></li>
@@ -19,18 +22,25 @@
       <h1 id="level">Level 1</h1>
       <div id="sequence"></div>
       <div id="question"></div>
+      <div id="cw" class="cw"></div>
       <div class="input-area">
         <input type="number" id="answer1">
         <input type="number" id="answer2" class="hidden">
         <input type="number" id="answer3" class="hidden">
-        <button id="submit">Submit</button>
+        <button id="submit">OK</button>
       </div>
-      <div id="info"></div>
       <div class="score-display">
         <span>Score: </span><span id="current-score">0</span>
         <button id="start">Start Game</button>
         <button id="reset">Reset</button>
       </div>
+    </div>
+  </div>
+
+  <div id="end" class="end">
+    <div class="end-box">
+      <div id="end-t" class="end-t"></div>
+      <button id="ok">OK</button>
     </div>
   </div>
 

@@ -11,6 +11,13 @@ let levelSets = [
   [[2,3,5,7,11,13],[1,2,4,7,11,16],[1,3,7,15,31,63],[1,2,6,15,31,56],[1,4,10,22,46,94]]
 ]
 
+function msg(t, c) {
+  let m = document.getElementById("cw")
+  m.textContent = t
+  m.className = "cw " + (c ? "ok" : "bad") + " show"
+  setTimeout(() => m.classList.remove("show"), 900)
+}
+
 function startGame() {
   gameActive = true
   level = 1
@@ -71,7 +78,12 @@ function checkAnswer() {
   
   if (correct) {
     score += level * 10
-  } 
+  } else {
+    score -= 5
+    if (score < 0) score = 0
+  }
+
+  msg(correct ? "Correct" : "Wrong", correct)
   
   document.getElementById("current-score").textContent = score
   
@@ -80,7 +92,7 @@ function checkAnswer() {
   if (level > 5) {
     endGame()
   } else {
-    setTimeout(nextLevel, 1500)
+    setTimeout(nextLevel, 700)
   }
 }
 
@@ -88,7 +100,8 @@ function endGame() {
   gameActive = false
   document.getElementById("sequence").innerHTML = ""
   document.getElementById("question").textContent = ""
-  document.getElementById("info").textContent = "Game Over! Final Score: " + score
+  document.getElementById("info").textContent = ""
+  document.getElementById("end-t").textContent = "Game Over! Final Score: " + score
   
   let oldScore = localStorage.getItem("score_sequence2")
   let oldScoreValue = oldScore ? parseInt(oldScore) : 0
@@ -98,7 +111,7 @@ function endGame() {
     document.querySelector(".game-score").textContent = score
   }
   
-  document.getElementById("start").classList.remove("hidden")
+  document.getElementById("end").classList.add("show")
 }
 
 function resetGame() {
@@ -112,6 +125,8 @@ function resetGame() {
   document.getElementById("answer1").value = ""
   document.getElementById("answer2").value = ""
   document.getElementById("answer3").value = ""
+  document.getElementById("cw").className = "cw"
+  document.getElementById("end").classList.remove("show")
   
   document.getElementById("current-score").textContent = 0
   document.getElementById("start").classList.remove("hidden")
@@ -120,6 +135,7 @@ function resetGame() {
 document.getElementById("start").onclick = startGame
 document.getElementById("submit").onclick = checkAnswer
 document.getElementById("reset").onclick = resetGame
+document.getElementById("ok").onclick = resetGame
 
 document.getElementById("answer1").addEventListener("keydown", e => {
   if (e.key === "Enter") checkAnswer()
